@@ -1,0 +1,2 @@
+source /Users/jerry/esp/rgb_led_project/build/bootloader/gdbinit/symbols
+source /Users/jerry/esp/rgb_led_project/build/bootloader/gdbinit/connect
