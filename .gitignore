@@ -1,1 +1,13 @@
 /build/
+/sdkconfig
+/sdkconfig.old
+*.bin
+*.elf
+*.map
+*.log
+*.pyc
+*.DS_Store
+.vscode/
+.idea/
+*.tmp
+*.bak
