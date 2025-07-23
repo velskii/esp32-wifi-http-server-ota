@@ -1,4 +1,3 @@
-h;
 /**
  * Add gobals here
  */
@@ -12,8 +11,14 @@ var wifiConnectInterval = null;
 $(document).ready(function () {
   getUpdateStatus();
   startDHTSensorInterval();
+  getConnectInfo();
+
   $("#connect_wifi").on("click", function () {
     checkCredentials();
+  });
+
+  $("#disconnect_wifi").on("click", function () {
+    disconnectWifi();
   });
 });
 
@@ -159,6 +164,7 @@ function getWifiConnectStatus() {
       document.getElementById("wifi_connect_status").innerHTML =
         "<h4 class='gr'>Connected to WiFi successfully!</h4>";
       stopWifiConnectStatusInterval();
+      getConnectInfo();
     }
   }
 }
@@ -235,4 +241,49 @@ function showPassword() {
   } else {
     pwdField.type = "password";
   }
+}
+
+/**
+ * Gets the connection information for display on the web page.
+ */
+function getConnectInfo() {
+  $.getJSON("/wifiConnectInfo.json", function (data) {
+    $("#connected_ap_label").html("Connected to: ");
+    $("#connected_ap").text(data["ap"]);
+
+    $("#ip_address_label").html("IP Address: ");
+    $("#wifi_connect_ip").text(data["ip"]);
+
+    $("#netmask_label").html("Netmask: ");
+    $("#wifi_connect_netmask").text(data["netmask"]);
+
+    $("#gateway_label").html("Gateway: ");
+    $("#wifi_connect_gw").text(data["gw"]);
+
+    document.getElementById("disconnect_wifi").style.display = "block";
+  });
+}
+
+/**
+ * Disconnects the WiFi once the disconnect button is clicked and reloads the page.
+ */
+function disconnectWifi() {
+  $.ajax({
+    type: "DELETE",
+    url: "/wifiDisconnect.json",
+    cache: false,
+    data: { timestamp: new Date().getTime() },
+    contentType: "application/json",
+    success: function (response) {
+      // Handle success response
+      $("#wifi_connect_status").html("Disconnecting from WiFi...");
+      setTimeout(function () {
+        window.location.reload();
+      }, 2000);
+    },
+    error: function (xhr, status, error) {
+      // Handle error response
+      $("#wifi_connect_status").html("Error disconnecting from WiFi: " + error);
+    },
+  });
 }

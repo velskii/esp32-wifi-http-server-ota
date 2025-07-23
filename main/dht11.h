@@ -8,7 +8,7 @@
 #define DHT_CHECKSUM_ERROR -1
 #define DHT_TIMEOUT_ERROR -2
 
-#define DHT_GPIO			25
+#define DHT_GPIO			33
 
 /**
  * Starts DHT11 sensor task

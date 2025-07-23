@@ -10,7 +10,7 @@
     <script src="jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="app.css" />
     <script async src="app.js"></script>
-    <title>ESP32 Udemy Course</title>
+    <title>ESP32 Application</title>
   </head>
   <body>
     <header>
@@ -74,24 +74,33 @@
       </section>
 
       <div class="buttons">
-        <input
-          type="button"
-          id="connect_wifi"
-          value="Connect"
-          onclick="connectToWiFi()"
-        />
+        <input type="button" id="connect_wifi" value="Connect" />
 
-        <input
-          type="button"
-          id="disconnect_wifi"
-          value="Disconnect"
-          onclick="disconnectFromWiFi()"
-        />
+        <input type="button" id="disconnect_wifi" value="Disconnect" />
       </div>
 
       <div id="wifi_connect_credentials_errors" class="error"></div>
       <h4 id="wifi_connect_status"></h4>
     </div>
+
+    <div id="ConnectInfo">
+      <section>
+        <div id="connected_ap_label"></div>
+        <div id="connected_ap"></div>
+      </section>
+      <div id="ip_address_label"></div>
+      <div id="wifi_connect_ip"></div>
+
+      <div id="netmask_label"></div>
+      <div id="wifi_connect_netmask"></div>
+
+      <div id="gateway_label"></div>
+      <div id="wifi_connect_gw"></div>
+
+      <div class="buttons">
+        <input id="disconnect_wifi" type="button" value="Disconnect" />
+      </div>
+    </div>
+    <hr />
   </body>
-  <html></html>
 </html>

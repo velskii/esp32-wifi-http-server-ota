@@ -8,6 +8,7 @@
 #include "esp_ota_ops.h"
 #include "esp_timer.h"
 #include "sys/param.h"
+#include "esp_wifi.h"
 #include "inttypes.h"
 #include "dht11.h"
 
@@ -386,6 +387,55 @@ static esp_err_t http_server_wifi_connect_status_json_handler(httpd_req_t *req)
 }
 
 /**
+ * wifiConnectInfo.json handler which updates the web page with connection information.
+ * @param req HTTP request for which the uri needs to be handled.
+ * @return ESP_OK if successful, otherwise ESP_FAIL if timeout occurs and the update cannot be started.
+ */
+static esp_err_t http_server_get_wifi_connect_info_json_handler(httpd_req_t *req)
+{
+	ESP_LOGI(TAG, "/wifiConnectInfo.json requested");
+
+	char ipInfoJSON[200];
+	memset(ipInfoJSON, 0, sizeof(ipInfoJSON));
+
+	char ip[IP4ADDR_STRLEN_MAX];
+	char netmask[IP4ADDR_STRLEN_MAX];
+	char gw[IP4ADDR_STRLEN_MAX];
+
+	if (g_wifi_connect_status == HTTP_WIFI_STATUS_CONNECT_SUCCESS)
+	{
+		wifi_ap_record_t wifi_data;
+		ESP_ERROR_CHECK(esp_wifi_sta_get_ap_info(&wifi_data));
+		char *ssid = (char *)wifi_data.ssid;
+
+		esp_netif_ip_info_t ip_info;
+		ESP_ERROR_CHECK(esp_netif_get_ip_info(esp_netif_sta, &ip_info));
+		esp_ip4addr_ntoa(&ip_info.ip, ip, IP4ADDR_STRLEN_MAX);
+		esp_ip4addr_ntoa(&ip_info.netmask, netmask, IP4ADDR_STRLEN_MAX);
+		esp_ip4addr_ntoa(&ip_info.gw, gw, IP4ADDR_STRLEN_MAX);
+
+		sprintf(ipInfoJSON, "{\"wifi_connect_status\": %d, \"wifi_ssid\": \"%s\", \"wifi_ip\": \"%s\", \"wifi_netmask\": \"%s\", \"wifi_gateway\": \"%s\"}", g_wifi_connect_status, ssid, ip, netmask, gw);
+	}
+	
+	httpd_resp_set_type(req, "application/json");
+	httpd_resp_send(req, ipInfoJSON, strlen(ipInfoJSON));
+
+	return ESP_OK;
+}
+
+/**
+ * wifiDisconnect.json handler which responds by sending to the wifi application to disconnect.
+ * @param req HTTP request for which the uri needs to be handled.
+ * @return ESP_OK if successful, otherwise ESP_FAIL if timeout occurs and the update cannot be started.
+ */
+static esp_err_t http_server_wifi_disconnect_json_handler(httpd_req_t *req)
+{
+	ESP_LOGI(TAG, "/wifiDisconnect.json requested");
+	wifi_app_send_message(WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT);
+	return ESP_OK;
+}
+
+/**
  * Sets up the default httpd server configuration.
  * @return http server instance handle if successful, NULL otherwise.
  */
@@ -515,6 +565,24 @@ static httpd_handle_t http_server_configure(void)
 				.user_ctx = NULL
 		};
 		httpd_register_uri_handler(http_server_handle, &wifi_connect_status_json);
+
+		// Register wifiConnectInfo.json handler
+		httpd_uri_t wifi_connect_info_json = {
+				.uri = "/wifiConnectInfo.json",
+				.method = HTTP_GET,
+				.handler = http_server_get_wifi_connect_info_json_handler,
+				.user_ctx = NULL
+		};
+		httpd_register_uri_handler(http_server_handle, &wifi_connect_info_json);
+
+		// Register wifiDisconnect.json handler
+		httpd_uri_t wifi_disconnect_json = {
+				.uri = "/wifiDisconnect.json",
+				.method = HTTP_DELETE,
+				.handler = http_server_wifi_disconnect_json_handler,
+				.user_ctx = NULL
+		};
+		httpd_register_uri_handler(http_server_handle, &wifi_disconnect_json);
 
 		return http_server_handle;
 	}
