@@ -1,0 +1,71 @@
+#include "esp_log.h"
+#include "esp_timer.h"
+
+#include "http_server_monitor.h"
+#include "http_handlers_ota.h"
+#include "http_handlers_wifi.h"
+
+static const char TAG[] = "http_server_monitor";
+
+// Externally accessible handlers (declared in http_server.c)
+extern QueueHandle_t http_server_monitor_queue_handle;
+
+// Global variables managed by monitor task
+// Wi-Fi connection status
+static int g_wifi_connect_status = NONE;
+// Firmware update status
+static int g_fw_update_status = OTA_UPDATE_PENDING;
+
+/**
+ * HTTP server monitor task used to track events of the HTTP server
+ * @param pvParameters parameter which can be passed to the task.
+ */
+static void http_server_monitor_start(void *parameter)
+{
+	http_server_queue_message_t msg;
+
+	for (;;)
+	{
+		if (xQueueReceive(http_server_monitor_queue_handle, &msg, portMAX_DELAY))
+		{
+			switch (msg.msgID)
+			{
+				case HTTP_MSG_WIFI_CONNECT_INIT:
+					ESP_LOGI(TAG, "HTTP_MSG_WIFI_CONNECT_INIT");
+					g_wifi_connect_status = HTTP_WIFI_STATUS_CONNECTING;
+
+					break;
+				case HTTP_MSG_WIFI_CONNECT_SUCCESS:
+					ESP_LOGI(TAG, "HTTP_MSG_WIFI_CONNECT_SUCCESS");
+					g_wifi_connect_status = HTTP_WIFI_STATUS_CONNECT_SUCCESS;
+
+					break;
+				case HTTP_MSG_WIFI_CONNECT_FAIL:
+					ESP_LOGI(TAG, "HTTP_MSG_WIFI_CONNECT_FAIL");
+					g_wifi_connect_status = HTTP_WIFI_STATUS_CONNECT_FAILED;
+
+					break;
+				case HTTP_MSG_OTA_UPDATE_SUCCESSFUL:
+					ESP_LOGI(TAG, "HTTP_MSG_OTA_UPDATE_SUCCESSFUL");
+					g_fw_update_status = OTA_UPDATE_SUCCESSFUL;
+					http_server_fw_update_reset_timer();
+
+					break;
+				case HTTP_MSG_OTA_UPDATE_FAILED:
+					ESP_LOGI(TAG, "HTTP_MSG_OTA_UPDATE_FAILED");
+					g_fw_update_status = OTA_UPDATE_FAILED;
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}
+
+// Sends a message to the HTTP server monitor task
+BaseType_t http_server_monitor_send_message(http_server_message_e msgID)
+{
+	http_server_queue_message_t msg;
+	msg.msgID = msgID;
+	return xQueueSend(http_server_monitor_queue_handle, &msg, portMAX_DELAY);
+}

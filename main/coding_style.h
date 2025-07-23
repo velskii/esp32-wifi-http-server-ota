@@ -1,8 +1,7 @@
-/*
- * coding_style.h
- *
+/**
+ * 	coding_style.h
  *  Created on: Jan 4, 2022
- *      Author: kjagu
+ *  Author: kjagu
  */
 
 #ifndef MAIN_CODING_STYLE_H_
@@ -53,16 +52,3 @@ typedef struct
 esp_err_t coding_style_public(int var_a, int var_b, int var_c);
 
 #endif /* MAIN_CODING_STYLE_H_ */
-
-
-
-
-
-
-
-
-
-
-
-
-

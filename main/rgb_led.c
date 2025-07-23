@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "driver/ledc.h"
+
 #include "rgb_led.h"
 
 ledc_info_t ledc_ch[RGB_LED_CHANNEL_NUM];
@@ -17,25 +18,25 @@ static void rgb_led_pwm_init(void)
   // RED
   ledc_ch[0].channel = LEDC_CHANNEL_0;
   ledc_ch[0].gpio = RGB_LED_RED_GPIO;
-  ledc_ch[0].mode = LEDC_HIGH_SPEED_MODE;
+  ledc_ch[0].mode = LEDC_LOW_SPEED_MODE;
   ledc_ch[0].timer_index = LEDC_TIMER_0;
 
   // GREEN
   ledc_ch[1].channel = LEDC_CHANNEL_1;
   ledc_ch[1].gpio = RGB_LED_GREEN_GPIO;
-  ledc_ch[1].mode = LEDC_HIGH_SPEED_MODE;
+  ledc_ch[1].mode = LEDC_LOW_SPEED_MODE;
   ledc_ch[1].timer_index = LEDC_TIMER_0;
 
   // BLUE
   ledc_ch[2].channel = LEDC_CHANNEL_2;
   ledc_ch[2].gpio = RGB_LED_BLUE_GPIO;
-  ledc_ch[2].mode = LEDC_HIGH_SPEED_MODE;
+  ledc_ch[2].mode = LEDC_LOW_SPEED_MODE;
   ledc_ch[2].timer_index = LEDC_TIMER_0;
 
   // Configure timer zero
   ledc_timer_config_t ledc_timer = 
   {
-    .speed_mode = LEDC_HIGH_SPEED_MODE,
+    .speed_mode = LEDC_LOW_SPEED_MODE,
     .timer_num = LEDC_TIMER_0,
     .duty_resolution = LEDC_TIMER_8_BIT, // 0-255
     .freq_hz = 100, 

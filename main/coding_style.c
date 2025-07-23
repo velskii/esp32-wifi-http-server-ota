@@ -1,8 +1,7 @@
-/*
- * coding_style.c
- *
+/**
+ * 	coding_style.c
  *  Created on: Jan 4, 2022
- *      Author: kjagu
+ *  Author: kjagu
  */
 
 // Include standard library header files e.g.:
@@ -17,6 +16,10 @@
 
 // Include application headers:
 #include "coding_style.h"
+
+// Global variables defined with "g_" prefix and use the "static" keyword
+// if the variable is restricted to use only within the same file.
+static bool g_variable = false;
 
 // Global netif objects for the WiFi station and access point
 esp_netif_t* coding_style_esp_netif_sta = NULL;

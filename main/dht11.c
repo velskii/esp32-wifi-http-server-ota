@@ -24,7 +24,7 @@
 #include "esp_system.h"
 #include "driver/gpio.h"
 
-#include "DHT11.h"
+#include "dht11.h"
 #include "tasks_common.h"
 
 // == global defines =============================================
