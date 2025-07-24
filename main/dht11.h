@@ -1,4 +1,4 @@
-/**	DHT11 temperature sensor driver
+/**	DHT11 humidity & temperature sensor driver
 */
 
 #ifndef DHT11_H_  
@@ -16,12 +16,11 @@
 void DHT11_task_start(void);
 
 // == function prototypes =======================================
-
-void 	setDHTgpio(int gpio);
-void 	errorHandler(int response);
-int 	readDHT();
-float 	getHumidity();
+void 	  setDHTgpio(int gpio);
+void 	  errorHandler(int response);
+int 	  readDHT();
+float   getHumidity();
 float 	getTemperature();
-int 	getSignalLevel( int usTimeOut, bool state );
+int 	  getSignalLevel( int usTimeOut, bool state );
 
 #endif

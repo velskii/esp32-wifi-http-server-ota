@@ -14,6 +14,33 @@
     source ./activate-esp-idf.sh
 ```
 
+## Build the project
+
+```bash
+    idf.py build
+```
+
+## Flash the compiled firmware onto ESP32
+
+    - connect esp32 to your computer via USB
+    - Identity the serial port:
+
+```bash
+  ls /dev/tty.*
+```
+
+    - Flash the firmware
+
+```bash
+idf.py -p /dev/tty.usbserial-0001 flash
+```
+
+    - Monitor the serial output
+
+```bash
+idf.py -p /dev/tty.usbserial-0001 monitor
+```
+
 ## Folder contents
 
 The project **hello_world** contains one source file in C language [hello_world_main.c](main/hello_world_main.c). The file is located in folder [main](main).
