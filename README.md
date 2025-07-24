@@ -22,20 +22,20 @@
 
 ## Flash the compiled firmware onto ESP32
 
-    - connect esp32 to your computer via USB
-    - Identity the serial port:
+- connect esp32 to your computer via USB
+- Identity the serial port:
 
 ```bash
   ls /dev/tty.*
 ```
 
-    - Flash the firmware
+- Flash the firmware
 
 ```bash
 idf.py -p /dev/tty.usbserial-0001 flash
 ```
 
-    - Monitor the serial output
+- Monitor the serial output
 
 ```bash
 idf.py -p /dev/tty.usbserial-0001 monitor
