@@ -20,9 +20,15 @@ typedef struct {
 } http_server_queue_message_t;
 
 // Starts the HTTP server monitor task
-void http_server_monitor_start(void);
+void http_server_monitor(void *pvParameters);
 
-// Sends a message to the HTTP server monitor task
+
+/**
+ * Sends a message to the HTTP server monitor task
+ * @param msgID message ID from the http_server_message_e enum.
+ * @return pdTRUE if an item was successfully sent to the queue, otherwise pdFALSE.
+ * @note Expand the parameter list based on your requirements e.g. how you've expanded the http_server_queue_message_t.
+ */
 BaseType_t http_server_monitor_send_message(http_server_message_e msgID);
 
 #endif // HTTP_SERVER_MONITOR_H_

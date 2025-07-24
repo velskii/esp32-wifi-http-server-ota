@@ -17,6 +17,7 @@
 #include "lwip/netdb.h"
 
 #include "http_server.h"
+#include "http_server_monitor.h"
 #include "rgb_led.h"
 #include "tasks_common.h"
 #include "wifi_app.h"
@@ -74,7 +75,6 @@ static void wifi_app_event_handler(void *arg, esp_event_base_t event_base, int32
         break;
       case WIFI_EVENT_STA_DISCONNECTED:
         ESP_LOGI(TAG, "WIFI_EVENT_STA_DISCONNECTED");
-        
 
         wifi_event_sta_disconnected_t *wifi_event_sta_disconnected = (wifi_event_sta_disconnected_t *)malloc(sizeof(wifi_event_sta_disconnected_t));
         *wifi_event_sta_disconnected = *((wifi_event_sta_disconnected_t *)event_data);
@@ -125,7 +125,6 @@ static void wifi_app_default_wifi_init(void)
   }
   ESP_ERROR_CHECK(ret);
 
-
   // Initialize the TCP/IP stack
   ESP_ERROR_CHECK(esp_netif_init());
 
@@ -134,6 +133,7 @@ static void wifi_app_default_wifi_init(void)
   ESP_ERROR_CHECK(esp_wifi_init(&wifi_init_config));
   ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
 
+  // Initialize the station netif
   esp_netif_sta = esp_netif_create_default_wifi_sta();
 
   ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
@@ -146,7 +146,7 @@ static void wifi_app_default_wifi_init(void)
   };
   ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &sta_config));
 
-
+  // Initialize the SoftAP
   esp_netif_ap = esp_netif_create_default_wifi_ap();
 }
 
@@ -253,17 +253,15 @@ static void wifi_app_task(void *pvParameters)
             // Start the HTTP server
             ESP_LOGI(TAG, "WIFI_APP_MSG_START_HTTP_SERVER");
             http_server_start();
-
             rgb_led_http_server_started();
+
             break;
           case WIFI_APP_MSG_CONNECTING_FROM_HTTP_SERVER:
             ESP_LOGI(TAG, "WIFI_APP_MSG_CONNECTING_FROM_HTTP_SERVER");
             // Attempt a connection to the Wi-Fi network
             wifi_app_connect_sta();
-
             // Set current number of retries to zero
             g_retry_number = 0;
-
             // Let the HTTP server know about the connection attempt
             http_server_monitor_send_message(HTTP_MSG_WIFI_CONNECT_INIT);
 
@@ -277,10 +275,10 @@ static void wifi_app_task(void *pvParameters)
             break;
           case WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT:
             ESP_LOGI(TAG, "WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT");
-
             g_retry_number = MAX_CONNECTION_RETRIES; // Set the retry number to max to force disconnect
             ESP_ERROR_CHECK(esp_wifi_disconnect());
             rgb_led_http_server_started();
+            
             break;
           case WIFI_APP_MSG_STA_DISCONNECTED:
             ESP_LOGI(TAG, "WIFI_APP_MSG_STA_DISCONNECTED");
@@ -301,10 +299,10 @@ BaseType_t wifi_app_send_message(wifi_app_message_e msgID)
     return xQueueSend(wifi_app_queue_handle, &msg, portMAX_DELAY);
 }
 
- wifi_config_t *wifi_app_get_wifi_config(void)
- {
+wifi_config_t *wifi_app_get_wifi_config(void)
+{
   return wifi_config;
- }
+}
 
 void wifi_app_start(void)
 {

@@ -10,17 +10,10 @@ static const char TAG[] = "http_server_monitor";
 // Externally accessible handlers (declared in http_server.c)
 extern QueueHandle_t http_server_monitor_queue_handle;
 
-// Global variables managed by monitor task
-// Wi-Fi connection status
-static int g_wifi_connect_status = NONE;
-// Firmware update status
-static int g_fw_update_status = OTA_UPDATE_PENDING;
-
 /**
  * HTTP server monitor task used to track events of the HTTP server
- * @param pvParameters parameter which can be passed to the task.
  */
-static void http_server_monitor_start(void *parameter)
+void http_server_monitor(void *pvParameters)
 {
 	http_server_queue_message_t msg;
 

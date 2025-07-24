@@ -4,8 +4,6 @@
  * Created on: July 2, 2025
  * Author: Greg
  */
- 
-
  #ifndef MAIN_WIFI_APP_H_
  #define MAIN_WIFI_APP_H_
 
@@ -21,7 +19,7 @@
  #define WIFI_AP_SSID_HIDDEN            false
  #define WIFI_AP_MAX_CONNECTIONS        5
  #define WIFI_AP_BEACON_INTERVAL        100
- #define WIFI_AP_IP_ADDRESS             "192.168.0.1"
+ #define WIFI_AP_IP_ADDRESS             "192.168.0.1" // default IP address for the SoftAP
  #define WIFI_AP_GATEWAY                "192.168.0.1"
  #define WIFI_AP_NETMASK                "255.255.255.0"
  #define WIFI_AP_BANDWIDTH              WIFI_BW_HT20
@@ -67,9 +65,8 @@ typedef struct wifi_app_queue_message
  */
  BaseType_t wifi_app_send_message(wifi_app_message_e msgID);
 
- /**
-  * Starts the WIFI RTOS task.
-  */
+// Starts the WIFI RTOS task.
+
  void wifi_app_start(void);
 
  /**

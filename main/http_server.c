@@ -18,7 +18,7 @@ static const char TAG[] = "http_server";
 
 static httpd_handle_t http_server_handle = NULL;
 static TaskHandle_t task_http_server_monitor = NULL;
-static QueueHandle_t http_server_monitor_queue_handle = NULL;
+QueueHandle_t http_server_monitor_queue_handle = NULL;
 
 static httpd_handle_t http_server_configure(void)
 {
@@ -34,7 +34,7 @@ static httpd_handle_t http_server_configure(void)
     ESP_LOGI(TAG, "Starting server on port %d", config.server_port);
 
     xTaskCreatePinnedToCore(
-        http_server_monitor_start,
+        http_server_monitor,
         "http_server_monitor",
         HTTP_SERVER_MONITOR_TASK_STACK_SIZE,
         NULL,

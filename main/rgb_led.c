@@ -68,6 +68,7 @@ static void rgb_led_pwm_init(void)
  */
 static void rgb_led_set_color(uint8_t red, uint8_t green, uint8_t blue)
 {
+  // Value should be 0-255 for 8 bit resolution
   ledc_set_duty(ledc_ch[0].mode, ledc_ch[0].channel, red);
   ledc_update_duty(ledc_ch[0].mode, ledc_ch[0].channel);
 

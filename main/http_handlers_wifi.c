@@ -20,7 +20,7 @@ int g_wifi_connect_status = NONE;
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK if successful, otherwise ESP_FAIL if timeout occurs and the update cannot be started.
  */
-static esp_err_t http_server_wifi_connect_json_handler(httpd_req_t *req)
+esp_err_t http_server_wifi_connect_json_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "/wifiConnect.json requested");
 	size_t len_ssid = 0, len_pass = 0;
@@ -63,7 +63,7 @@ static esp_err_t http_server_wifi_connect_json_handler(httpd_req_t *req)
 /**
  * WifiConnectStatus handler which updates the connection status for the web page.
  */
-static esp_err_t http_server_wifi_connect_status_json_handler(httpd_req_t *req)
+esp_err_t http_server_wifi_connect_status_json_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "/wifiConnectStatus requested");
 	char statusJSON[100];
@@ -79,7 +79,7 @@ static esp_err_t http_server_wifi_connect_status_json_handler(httpd_req_t *req)
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK if successful, otherwise ESP_FAIL if timeout occurs and the update cannot be started.
  */
-static esp_err_t http_server_get_wifi_connect_info_json_handler(httpd_req_t *req)
+esp_err_t http_server_get_wifi_connect_info_json_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "/wifiConnectInfo.json requested");
 
@@ -116,7 +116,7 @@ static esp_err_t http_server_get_wifi_connect_info_json_handler(httpd_req_t *req
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK if successful, otherwise ESP_FAIL if timeout occurs and the update cannot be started.
  */
-static esp_err_t http_server_wifi_disconnect_json_handler(httpd_req_t *req)
+esp_err_t http_server_wifi_disconnect_json_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "/wifiDisconnect.json requested");
 	wifi_app_send_message(WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT);

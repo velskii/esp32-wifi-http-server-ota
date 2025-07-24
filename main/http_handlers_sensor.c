@@ -14,7 +14,7 @@ static const char *TAG = "HTTP_HANDLERS_SENSOR";
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK if successful, otherwise ESP_FAIL if timeout occurs and the update cannot be started.
  */
-static esp_err_t http_server_get_dht_sensor_readings_json_handler(httpd_req_t *req)
+esp_err_t http_server_get_dht_sensor_readings_json_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "/dhtSensor.json requested");
 	

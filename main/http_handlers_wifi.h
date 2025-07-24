@@ -13,7 +13,7 @@ typedef enum http_server_wifi_connect_status
 } http_server_wifi_connect_status_e;
 
 // Expose global status
-extern g_wifi_connect_status;
+extern int g_wifi_connect_status;
 
 // URI handlers
 esp_err_t http_server_wifi_connect_json_handler(httpd_req_t *req);

@@ -1,3 +1,7 @@
+#ifndef MIN
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#endif
+
 #include <string.h>
 
 #include "esp_err.h"
@@ -10,7 +14,7 @@
 #include "http_handlers_ota.h"
 #include "http_server_monitor.h"
 
-static const char TAG[] = "http_server_OTA";
+static const char TAG[] = "http_handlers_OTA";
 
 int g_fw_update_status = OTA_UPDATE_PENDING;
 
@@ -144,7 +148,7 @@ esp_err_t http_server_OTA_status_handler(httpd_req_t *req)
 
 
 // Checks the g_fw_update_status and creates the fw_update_reset timer if g_fw_update_status is OTA_UPDATE_SUCCESSFUL
-static void http_server_fw_update_reset_timer(void)
+void http_server_fw_update_reset_timer(void)
 {
 	if (g_fw_update_status == OTA_UPDATE_SUCCESSFUL)
 	{

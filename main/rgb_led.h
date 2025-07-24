@@ -17,21 +17,13 @@ typedef struct
   int timer_index;
 } ledc_info_t;
 
-// ledc_info_t ledc_ch[RGB_LED_CHANNEL_NUM];
-
-/**
- * Color to indicate WIFI application has started
- */
+// Color to indicate WIFI application has started
 void rgb_led_wifi_app_started(void);
 
-/**
- * Color to indicate HTTP server has started
- */
+// Color to indicate HTTP server has started 
 void rgb_led_http_server_started(void);
 
-/**
- * Color to indicate that the ESP32 is connected to an access point
- */
+// Color to indicate that the ESP32 is connected to an access point
 void rgb_led_wifi_connected(void);
 
 #endif

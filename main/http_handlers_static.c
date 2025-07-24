@@ -24,7 +24,7 @@ extern const uint8_t favicon_ico_end[]				asm("_binary_favicon_ico_end");
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK
  */
-static esp_err_t http_server_jquery_handler(httpd_req_t *req)
+esp_err_t http_server_jquery_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "Jquery requested");
 
@@ -39,7 +39,7 @@ static esp_err_t http_server_jquery_handler(httpd_req_t *req)
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK
  */
-static esp_err_t http_server_index_html_handler(httpd_req_t *req)
+esp_err_t http_server_index_html_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "index.html requested");
 
@@ -54,7 +54,7 @@ static esp_err_t http_server_index_html_handler(httpd_req_t *req)
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK
  */
-static esp_err_t http_server_app_css_handler(httpd_req_t *req)
+esp_err_t http_server_app_css_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "app.css requested");
 
@@ -69,7 +69,7 @@ static esp_err_t http_server_app_css_handler(httpd_req_t *req)
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK
  */
-static esp_err_t http_server_app_js_handler(httpd_req_t *req)
+esp_err_t http_server_app_js_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "app.js requested");
 
@@ -84,7 +84,7 @@ static esp_err_t http_server_app_js_handler(httpd_req_t *req)
  * @param req HTTP request for which the uri needs to be handled.
  * @return ESP_OK
  */
-static esp_err_t http_server_favicon_ico_handler(httpd_req_t *req)
+esp_err_t http_server_favicon_ico_handler(httpd_req_t *req)
 {
 	ESP_LOGI(TAG, "favicon.ico requested");
 
