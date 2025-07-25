@@ -40,9 +40,11 @@ h4 {
 #latest_firmware_label {
   display: inline;
 }
+
 #latest_firmware {
   color: #1d3557;
 }
+
 #temperature_reading,
 #humidity_reading {
   display: inline;

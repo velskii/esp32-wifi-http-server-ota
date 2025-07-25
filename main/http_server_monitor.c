@@ -12,6 +12,7 @@ extern QueueHandle_t http_server_monitor_queue_handle;
 
 /**
  * HTTP server monitor task used to track events of the HTTP server
+ * @param pvParameters parameter which can be passed to the task.
  */
 void http_server_monitor(void *pvParameters)
 {
@@ -47,6 +48,7 @@ void http_server_monitor(void *pvParameters)
 				case HTTP_MSG_OTA_UPDATE_FAILED:
 					ESP_LOGI(TAG, "HTTP_MSG_OTA_UPDATE_FAILED");
 					g_fw_update_status = OTA_UPDATE_FAILED;
+					
 					break;
 				default:
 					break;

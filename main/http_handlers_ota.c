@@ -10,12 +10,14 @@
 #include "esp_ota_ops.h"
 #include "esp_timer.h"
 #include "esp_app_format.h"
+#include "sys/param.h"
 
 #include "http_handlers_ota.h"
 #include "http_server_monitor.h"
 
-static const char TAG[] = "http_handlers_OTA";
+static const char TAG[] = "http_handlers_ota";
 
+// Firmware update status
 int g_fw_update_status = OTA_UPDATE_PENDING;
 
 // ESP32 timer configuration passed to esp_timer_create() to reset the ESP32 after a successful OTA update
@@ -49,16 +51,32 @@ esp_err_t http_server_OTA_update_handler(httpd_req_t *req)
 	do 
 	{
 		// Read the data for the request
-		if ((recv_len = httpd_req_recv(req, ota_buff, MIN(content_length, sizeof(ota_buff)))) <= 0)
-		{
-			if (recv_len == HTTPD_SOCK_ERR_TIMEOUT)
-			{
-				ESP_LOGE(TAG, "http_server_OTA_update_handler: Timeout while receiving data");
-				continue; // Retry receiving if timeout occurred
+		// if ((recv_len = httpd_req_recv(req, ota_buff, MIN(content_length, sizeof(ota_buff)))) <= 0)
+		// {
+		// 	if (recv_len == HTTPD_SOCK_ERR_TIMEOUT)
+		// 	{
+		// 		ESP_LOGE(TAG, "http_server_OTA_update_handler: Timeout while receiving data");
+		// 		continue; // Retry receiving if timeout occurred
+		// 	}
+		// 	ESP_LOGE(TAG, "http_server_OTA_update_handler: OTA other Error %d", recv_len);
+		// 	return ESP_FAIL;
+		// }
+		recv_len = httpd_req_recv(req, ota_buff, MIN(content_length - content_received, sizeof(ota_buff)));
+		if (recv_len < 0) {
+			if (recv_len == HTTPD_SOCK_ERR_TIMEOUT) {
+				ESP_LOGW(TAG, "http_server_OTA_update_handler: Timeout while receiving data");
+				continue; // Retry
+			} else {
+				ESP_LOGE(TAG, "http_server_OTA_update_handler: OTA recv error %d", recv_len);
+				g_fw_update_status = OTA_UPDATE_FAILED;
+				return ESP_FAIL;
 			}
-			ESP_LOGE(TAG, "http_server_OTA_update_handler: OTA other Error %d", recv_len);
-			return ESP_FAIL;
+		} else if (recv_len == 0) {
+			// No more data, may be end of transmission
+			ESP_LOGI(TAG, "http_server_OTA_update_handler: All data received");
+			break;
 		}
+
 		printf("http_server_OTA_update_handler: OTA RX %d of %d bytes\n",content_received, recv_len);
 
 		// Check if this is the first data we are receiving, If so, it will have the information in the handler that we need to start the OTA update
@@ -86,13 +104,27 @@ esp_err_t http_server_OTA_update_handler(httpd_req_t *req)
 			}
 
 			// Write the first part of the data to the OTA partition
-			esp_ota_write(ota_handle, body_start_p, body_part_len);
+			// esp_ota_write(ota_handle, body_start_p, body_part_len);
+			// content_received += body_part_len;
+			esp_err_t write_err = esp_ota_write(ota_handle, body_start_p, body_part_len);
+			if (write_err != ESP_OK) {
+				ESP_LOGE(TAG, "esp_ota_write failed! (%s)", esp_err_to_name(write_err));
+				esp_ota_end(ota_handle);  // Clean up handle even if failed
+				return ESP_FAIL;
+			}
 			content_received += body_part_len;
 		}
 		else 
 		{
 			// Write OTA data to the OTA partition
-			esp_ota_write(ota_handle, ota_buff, recv_len);
+			// esp_ota_write(ota_handle, ota_buff, recv_len);
+			// content_received += recv_len;
+			esp_err_t write_err = esp_ota_write(ota_handle, ota_buff, recv_len);
+			if (write_err != ESP_OK) {
+					ESP_LOGE(TAG, "esp_ota_write failed! (%s)", esp_err_to_name(write_err));
+					esp_ota_end(ota_handle);  // Clean up
+					return ESP_FAIL;
+			}
 			content_received += recv_len;
 		}
 	} while (recv_len > 0 && content_received < content_length);
@@ -105,16 +137,20 @@ esp_err_t http_server_OTA_update_handler(httpd_req_t *req)
 			const esp_partition_t *boot_partition = esp_ota_get_boot_partition();
 			ESP_LOGI(TAG, "http_server_OTA_update_handler: Next booting from partition subtype %d at offset 0x%" PRIx32,
 					boot_partition->subtype, boot_partition->address);
+
+			g_fw_update_status = OTA_UPDATE_SUCCESSFUL; 
 			flash_successful = true;
 		}
 		else 
 		{
 			ESP_LOGE(TAG, "http_server_OTA_update_handler: FLASH ERROR");
+			g_fw_update_status = OTA_UPDATE_FAILED;
 		}
 	}
 	else 
 	{
 		ESP_LOGE(TAG, "http_server_OTA_update_handler: esp_ota_end failed");
+		g_fw_update_status = OTA_UPDATE_FAILED;
 	}
 
 	// We won't update the global variables throughout the file, so send the message about the status of the OTA update
@@ -153,6 +189,7 @@ void http_server_fw_update_reset_timer(void)
 	if (g_fw_update_status == OTA_UPDATE_SUCCESSFUL)
 	{
 		ESP_LOGI(TAG, "http_server_fw_update_reset_timer: Creating fw_update_reset timer");
+		// Give the web page a chance to  receive an acknowledgment back and initialize the timer
 		ESP_ERROR_CHECK(esp_timer_create(&fw_update_reset_args, &fw_update_reset));
 		ESP_ERROR_CHECK(esp_timer_start_once(fw_update_reset, 8000000));
 	}

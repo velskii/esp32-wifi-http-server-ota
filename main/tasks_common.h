@@ -8,23 +8,23 @@
 #define MAIN_TASKS_COMMON_H_
 
 // WIFI application task
-#define WIFI_APP_TASK_STACK_SIZE        4096
-#define WIFI_APP_TASK_PRIORITY          5
-#define WIFI_APP_TASK_CORE_ID           0
+#define WIFI_APP_TASK_STACK_SIZE              4096
+#define WIFI_APP_TASK_PRIORITY                5
+#define WIFI_APP_TASK_CORE_ID                 0
 
 // HTTP server task
-#define HTTP_SERVER_TASK_STACK_SIZE     8192
-#define HTTP_SERVER_TASK_PRIORITY       4
-#define HTTP_SERVER_TASK_CORE_ID        0
+#define HTTP_SERVER_TASK_STACK_SIZE           8192
+#define HTTP_SERVER_TASK_PRIORITY             4
+#define HTTP_SERVER_TASK_CORE_ID              0
 
 // HTTP server Monitor task
-#define HTTP_SERVER_MONITOR_TASK_STACK_SIZE  4098
-#define HTTP_SERVER_MONITOR_TASK_PRIORITY    3
-#define HTTP_SERVER_MONITOR_TASK_CORE_ID     0
+#define HTTP_SERVER_MONITOR_TASK_STACK_SIZE   4098
+#define HTTP_SERVER_MONITOR_TASK_PRIORITY     3
+#define HTTP_SERVER_MONITOR_TASK_CORE_ID      0
 
 // DHT11 sensor task
-#define DHT11_TASK_STACK_SIZE         4096
-#define DHT11_TASK_PRIORITY           5
-#define DHT11_TASK_CORE_ID            1
+#define DHT11_TASK_STACK_SIZE                 4096
+#define DHT11_TASK_PRIORITY                   5
+#define DHT11_TASK_CORE_ID                    1
 
 #endif /* MAIN_TASKS_COMMON_H_ */

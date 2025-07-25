@@ -126,7 +126,7 @@ function getDHTSensorValues() {
 }
 
 /**
- * Sets an interval to get the DHT11 sensor values every 2 seconds.
+ * Sets an interval to get the DHT11 sensor values every 5 seconds.
  */
 function startDHTSensorInterval() {
   setInterval(getDHTSensorValues, 5000);

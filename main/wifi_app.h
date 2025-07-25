@@ -27,8 +27,8 @@
  #define MAX_SSID_LENGTH                32
  #define MAX_PASSWORD_LENGTH            64
  #define MAX_CONNECTION_RETRIES         5
- #define WIFI_STA_SSID                  "ESP32_STA"
- #define WIFI_STA_PASSWORD              "12345678"
+ #define WIFI_STA_SSID                  "2682"
+ #define WIFI_STA_PASSWORD              "Aa1234567890"
 
  // netif object for the Station and Access Point
  extern esp_netif_t *esp_netif_sta;
