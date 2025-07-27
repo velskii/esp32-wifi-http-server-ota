@@ -12,8 +12,10 @@ idf_component_register(
         "http_server_monitor.c"
         "http_handlers_sensor.c"
         "http_handlers_ota.c"
+        "http_handlers_sntp.c"
         "app_nvs.c"
         "wifi_reset_button.c"
+        "sntp_time_sync.c"
     INCLUDE_DIRS "."
     REQUIRES 
         driver

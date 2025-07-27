@@ -4,6 +4,7 @@
 #include "http_server_monitor.h"
 #include "http_handlers_ota.h"
 #include "http_handlers_wifi.h"
+#include "http_handlers_sntp.h"
 
 static const char TAG[] = "http_server_monitor";
 
@@ -54,6 +55,11 @@ void http_server_monitor(void *pvParameters)
 					ESP_LOGI(TAG, "HTTP_MSG_OTA_UPDATE_FAILED");
 					g_fw_update_status = OTA_UPDATE_FAILED;
 					
+					break;
+				case HTTP_MSG_TIME_SERVICE_INITIALIZED:
+					ESP_LOGI(TAG, "HTTP_MSG_TIME_SERVICE_INITIALIZED");
+					g_is_local_time_set = true;
+
 					break;
 				default:
 					break;

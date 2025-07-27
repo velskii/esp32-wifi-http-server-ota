@@ -26,6 +26,9 @@
 // Tag used for ESP serial console logging messages
 static const char TAG[] = "wifi_app";
 
+// WiFi application callback
+static wifi_connected_event_callback_t wifi_connected_event_cb = NULL;
+
 // Used for returning the WiFi configuration
 wifi_config_t *wifi_config = NULL;
 
@@ -75,8 +78,6 @@ static void wifi_app_event_handler(void *arg, esp_event_base_t event_base, int32
 
       case WIFI_EVENT_STA_START:
         ESP_LOGI(TAG, "WIFI_EVENT_STA_START");
-        // Start the Wi-Fi station
-        ESP_ERROR_CHECK(esp_wifi_connect());
         break;
       case WIFI_EVENT_STA_CONNECTED:
         ESP_LOGI(TAG, "WIFI_EVENT_STA_CONNECTED");
@@ -313,6 +314,12 @@ static void wifi_app_task(void *pvParameters)
               xEventGroupClearBits(wifi_app_event_group, WIFI_APP_CONNECTING_FROM_HTTP_SERVER_BIT);
             }
 
+            // Check for connection callback
+            if (wifi_connected_event_cb != NULL)
+            {
+              wifi_app_call_callback();
+            }
+
             break;
           case WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT:
             ESP_LOGI(TAG, "WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT");
@@ -382,6 +389,16 @@ BaseType_t wifi_app_send_message(wifi_app_message_e msgID)
 wifi_config_t *wifi_app_get_wifi_config(void)
 {
   return wifi_config;
+}
+
+void wifi_app_set_callback(wifi_connected_event_callback_t cb)
+{
+  wifi_connected_event_cb = cb;
+}
+
+void wifi_app_call_callback(void)
+{
+  wifi_connected_event_cb();
 }
 
 void wifi_app_start(void)

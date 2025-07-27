@@ -5,12 +5,21 @@
  * Author: Greg
  */
 
+#include "esp_log.h"
 #include "nvs_flash.h"
 
+#include "sntp_time_sync.h"
 #include "wifi_app.h"
 #include "dht11.h"
 #include "wifi_reset_button.h"
 
+static const char TAG[] = "main";
+
+void wifi_application_connected_events(void)
+{
+    ESP_LOGI(TAG, "Wi-Fi application connected");
+    sntp_time_sync_task_start();
+}
 
 void app_main(void)
 {
@@ -45,4 +54,7 @@ void app_main(void)
 
     // Start DHT11 sensor task
     // DHT11_task_start();
+
+    // Set connected event callback
+    wifi_app_set_callback(&wifi_application_connected_events);
 }
