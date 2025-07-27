@@ -45,6 +45,7 @@ typedef enum wifi_app_message
     WIFI_APP_MSG_CONNECTING_FROM_HTTP_SERVER,
     WIFI_APP_MSG_STA_CONNECTED_GOT_IP, 
     WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT,
+    WIFI_APP_MSG_LOAD_SAVED_CREDENTIALS,
     WIFI_APP_MSG_STA_DISCONNECTED,
 } wifi_app_message_e;
 
@@ -69,9 +70,8 @@ typedef struct wifi_app_queue_message
 
  void wifi_app_start(void);
 
- /**
-  * @brief Gets the Wi-Fi configuration.
-  */
+// Gets the Wi-Fi configuration.
+
  wifi_config_t *wifi_app_get_wifi_config(void);
 
  #endif /* MAIN_WIFI_APP_H_ */

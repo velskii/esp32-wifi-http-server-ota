@@ -40,5 +40,5 @@ void app_main(void)
     wifi_app_start();
 
     // Start DHT11 sensor task
-    DHT11_task_start();
+    // DHT11_task_start();
 }

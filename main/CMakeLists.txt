@@ -12,6 +12,7 @@ idf_component_register(
         "http_server_monitor.c"
         "http_handlers_sensor.c"
         "http_handlers_ota.c"
+        "app_nvs.c"
     INCLUDE_DIRS "."
     REQUIRES 
         driver

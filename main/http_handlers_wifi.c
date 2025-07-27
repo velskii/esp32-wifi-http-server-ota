@@ -12,6 +12,7 @@
 
 static const char TAG[] = "http_handlers_wifi";
 
+// Expose global status, WiFi connection status
 int g_wifi_connect_status = NONE;
 
 
@@ -102,7 +103,7 @@ esp_err_t http_server_get_wifi_connect_info_json_handler(httpd_req_t *req)
 		esp_ip4addr_ntoa(&ip_info.netmask, netmask, IP4ADDR_STRLEN_MAX);
 		esp_ip4addr_ntoa(&ip_info.gw, gw, IP4ADDR_STRLEN_MAX);
 
-		sprintf(ipInfoJSON, "{\"wifi_connect_status\": %d, \"wifi_ssid\": \"%s\", \"wifi_ip\": \"%s\", \"wifi_netmask\": \"%s\", \"wifi_gateway\": \"%s\"}", g_wifi_connect_status, ssid, ip, netmask, gw);
+		sprintf(ipInfoJSON, "{\"ip\": \"%s\", \"netmask\": \"%s\", \"gw\": \"%s\", \"ap\": \"%s\"}", ip, netmask, gw, ssid);
 	}
 	
 	httpd_resp_set_type(req, "application/json");

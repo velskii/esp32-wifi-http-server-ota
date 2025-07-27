@@ -216,11 +216,11 @@ function checkCredentials() {
   var pwd = $("#connect_pass").val();
 
   if (selectedSSID === "") {
-    errorList += "SSID cannot be empty.<br>";
+    errorList += "<h4 class='rd'>SSID cannot be empty!</h4>";
     credsOK = false;
   }
   if (pwd === "") {
-    errorList += "Password cannot be empty.<br>";
+    errorList += "<h4 class='rd'>Password cannot be empty.</h4>";
     credsOK = false;
   }
   if (credsOK === false) {
