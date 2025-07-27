@@ -13,6 +13,7 @@ idf_component_register(
         "http_handlers_sensor.c"
         "http_handlers_ota.c"
         "app_nvs.c"
+        "wifi_reset_button.c"
     INCLUDE_DIRS "."
     REQUIRES 
         driver
