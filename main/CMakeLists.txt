@@ -13,6 +13,7 @@ idf_component_register(
         "http_handlers_sensor.c"
         "http_handlers_ota.c"
         "http_handlers_sntp.c"
+        "http_handlers_ap_ssid.c"
         "app_nvs.c"
         "wifi_reset_button.c"
         "sntp_time_sync.c"

@@ -13,6 +13,7 @@
 #include "http_handlers_sensor.h"
 #include "http_server_monitor.h"
 #include "http_handlers_sntp.h"
+#include "http_handlers_ap_ssid.h"
 #include "tasks_common.h"
 
 static const char TAG[] = "http_server";
@@ -146,11 +147,11 @@ static httpd_handle_t http_server_configure(void)
             .handler = http_server_get_local_time_json_handler,
         });
 
-        // httpd_register_uri_handler(http_server_handle, &(httpd_uri_t){
-        //     .uri = "/apSSID.json",
-        //     .method = HTTP_GET,
-        //     .handler = http_server_get_ap_ssid_json_handler,
-        // });
+        httpd_register_uri_handler(http_server_handle, &(httpd_uri_t){
+            .uri = "/apSSID.json",
+            .method = HTTP_GET,
+            .handler = http_server_get_ap_ssid_json_handler,
+        });
 
         return http_server_handle;
     }
