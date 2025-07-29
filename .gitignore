@@ -11,3 +11,4 @@
 .idea/
 *.tmp
 *.bak
+/main/certs/
