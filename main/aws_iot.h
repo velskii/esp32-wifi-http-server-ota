@@ -1,7 +1,5 @@
-// aws_iot.h
-
-#ifndef AWS_IOT_H
-#define AWS_IOT_H
+#ifndef MAIN_AWS_IOT_H
+#define MAIN_AWS_IOT_H
 
 #include "core_mqtt.h"
 #include "transport_interface.h"
@@ -20,4 +18,4 @@ esp_err_t aws_iot_mqtt_publish(MQTTContext_t *mqttContext,
 
 esp_err_t aws_iot_mqtt_subscribe(MQTTContext_t *mqttContext);
 
-#endif // AWS_IOT_H
+#endif // MAIN_AWS_IOT_H

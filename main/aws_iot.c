@@ -1,11 +1,10 @@
-// aws_iot.c
+#include <string.h>
 
 #include "aws_iot.h"
 #include "core_mqtt.h"
 #include "esp_log.h"
 #include "esp_err.h"
 #include "esp_timer.h"
-#include <string.h>
 
 static const char *TAG = "AWS_IOT";
 
