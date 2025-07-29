@@ -1,0 +1,19 @@
+menu "AWS IoT MQTT Configuration"
+
+config MQTT_SEND_TIMEOUT_MS
+    int "MQTT Send Timeout (ms)"
+    default 1000
+
+config MQTT_RECV_POLLING_TIMEOUT_MS
+    int "MQTT Receive Polling Timeout (ms)"
+    default 100
+
+config MQTT_PINGRESP_TIMEOUT_MS
+    int "MQTT PingResp Timeout (ms)"
+    default 5000
+
+config MQTT_MAX_CONNACK_RECEIVE_RETRY_COUNT
+    int "Max CONNACK Receive Retry Count"
+    default 3
+
+endmenu

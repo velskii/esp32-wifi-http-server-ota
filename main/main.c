@@ -12,6 +12,7 @@
 #include "wifi_app.h"
 #include "dht11.h"
 #include "wifi_reset_button.h"
+#include "aws_iot.h"
 
 static const char TAG[] = "main";
 
@@ -19,6 +20,15 @@ void wifi_application_connected_events(void)
 {
     ESP_LOGI(TAG, "Wi-Fi application connected");
     sntp_time_sync_task_start();
+
+    // aws
+    MQTTContext_t mqttContext;
+    MQTTFixedBuffer_t networkBuffer;
+    TransportInterface_t transport;
+
+    aws_iot_mqtt_connect(&mqttContext, &transport, &networkBuffer);
+    aws_iot_mqtt_publish(&mqttContext, "Hello from ESP32");
+    aws_iot_mqtt_subscribe(&mqttContext);
 }
 
 void app_main(void)

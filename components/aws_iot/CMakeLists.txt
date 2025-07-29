@@ -1,0 +1,19 @@
+idf_component_register(
+    SRCS
+        coreMQTT/coreMQTT/source/core_mqtt.c
+        coreMQTT/coreMQTT/source/core_mqtt_state.c
+        coreJSON/coreJSON/source/core_json.c
+        backoffAlgorithm/backoffAlgorithm/source/backoff_algorithm.c
+        coreMQTT/coreMQTT/source/core_mqtt_serializer.c 
+    REQUIRES
+        esp-tls
+    INCLUDE_DIRS
+        ${CMAKE_CURRENT_SOURCE_DIR}/coreMQTT/config
+        ${CMAKE_CURRENT_SOURCE_DIR}/coreMQTT/coreMQTT/source/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/coreMQTT/port/network_transport
+        ${CMAKE_CURRENT_SOURCE_DIR}/coreMQTT/coreMQTT/source/interface
+        ${CMAKE_CURRENT_SOURCE_DIR}/coreJSON/coreJSON/source/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/backoffAlgorithm/backoffAlgorithm/source/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/logging
+        ${CMAKE_CURRENT_SOURCE_DIR}/common/posix_compat
+)
